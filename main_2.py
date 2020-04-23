@@ -228,7 +228,7 @@ def AUC_and_PN(model, datasets, args):
 def pretrainModel(model, train_data, datasets, args):
 
     lr = args.init_lr
-    optimizer = optim.SGD(model.parameters(), lr=lr, weight_decay=args.weight_deca)
+    optimizer = optim.SGD(model.parameters(), lr=lr, weight_decay=args.weight_decay)
 
     now = time.strftime("%Y-%m-%d %H:%M:%S")
     print("Training:", str(now))
@@ -330,7 +330,7 @@ def trainModel(model, train_data_temp, datasets, args):
     model.train()
     batch = [args.group_size, args.batch_size_train]
     lr = args.init_lr / 100.
-    optimizer = optim.SGD(model.parameters(), lr=lr, weight_decay=args.weight_deca)
+    optimizer = optim.SGD(model.parameters(), lr=lr, weight_decay=args.weight_decay)
     train_data_filter = bags_sampling(train_data_temp, args.p, args.pn)
     print("len(train_data_filter):{}".format(len(train_data_filter)))
     train_data_gps = make_train_data(train_data_filter, word2id, max_filter_len, sentence_len, num_classes, group_size)
