@@ -15,7 +15,6 @@ from preprocess.data2pkl import DocumentContainer
 from model.model_bagatt import Model
 
 
-
 def bags_decompose(data_bags):
     bag_sent = [data_bag.sentences for data_bag in data_bags]
     bag_label = [data_bag.label for data_bag in data_bags]
@@ -210,7 +209,11 @@ def pretrainModel(model, train_data, datasets, args):
     [train_label, train_sents, _, train_ldist, train_rdist, _, train_epos, train_sentlen] = bags_decompose(train_data)
     lr = args.init_lr
     optimizer = optim.SGD(model.parameters(), lr=lr, weight_decay=args.weight_decay)
-
+    if args.optimizer == "adadelta":
+        optimizer = optim.Adadelta(model.parameters(), weight_decay=args.weight_decay)
+        print("optimizer is adadelta")
+    else:
+        print("optimizer is sgd")
     now = time.strftime("%Y-%m-%d %H:%M:%S")
     print("Training:", str(now))
     temp_order = list(range(len(train_label)))
@@ -302,7 +305,11 @@ def trainModel(model, train_data, datasets, args):
 
     lr = args.init_lr / 100.
     optimizer = optim.SGD(model.parameters(), lr=lr, weight_decay=args.weight_decay)
-
+    if args.optimizer == "adadelta":
+        optimizer = optim.Adadelta(model.parameters(), weight_decay=args.weight_decay)
+        print("optimizer is adadelta")
+    else:
+        print("optimizer is sgd")
     now = time.strftime("%Y-%m-%d %H:%M:%S")
     print("Training:", str(now))
     data_length = np.array([len(t) for t in train_label])
@@ -410,6 +417,7 @@ if __name__ == "__main__":
     parser.add_argument('--pretrain', action='store_true', help='pre-training or not')
     parser.add_argument('--modelpath', type=str, default="result/PCNN_ATTRA.model", help='path to model file')
     parser.add_argument('--weight_decay', type=float, default=0.001, help='l2')
+    parser.add_argument("--optimizer", type=str, default="sgd")
 
     args = parser.parse_args()
     print(args)
