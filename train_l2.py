@@ -143,6 +143,7 @@ def eval(model, testset, args):
 
     return y_true, y_scores
 
+
 def AUC_and_PN(model, datasets, args):
 
     model.eval()
@@ -210,7 +211,7 @@ def pretrainModel(model, train_data, datasets, args):
     lr = args.init_lr
     optimizer = optim.SGD(model.parameters(), lr=lr, weight_decay=args.weight_decay)
     if args.optimizer == "adadelta":
-        optimizer = optim.Adadelta(model.parameters(), weight_decay=args.weight_decay)
+        optimizer = optim.Adadelta(model.parameters(), lr=lr, weight_decay=args.weight_decay)
         print("optimizer is adadelta")
     else:
         print("optimizer is sgd")
@@ -306,7 +307,7 @@ def trainModel(model, train_data, datasets, args):
     lr = args.init_lr / 100.
     optimizer = optim.SGD(model.parameters(), lr=lr, weight_decay=args.weight_decay)
     if args.optimizer == "adadelta":
-        optimizer = optim.Adadelta(model.parameters(), weight_decay=args.weight_decay)
+        optimizer = optim.Adadelta(model.parameters(), lr=lr, weight_decay=args.weight_decay)
         print("optimizer is adadelta")
     else:
         print("optimizer is sgd")
@@ -414,9 +415,9 @@ if __name__ == "__main__":
     parser.add_argument('--sent_encoding', type=str, default="pcnn", help='sentence encoding method, cnn or pcnn')
     parser.add_argument('--use_RA', action='store_true', help='use relation-aware intra-bag attention or not')
     parser.add_argument('--modelname', type=str, default="PCNN_ATTRA", help='model name')
-    parser.add_argument('--pretrain', action='store_true', help='pre-training or not')
+    parser.add_argument('--pretrain',cp  action='store_true', help='pre-training or not')
     parser.add_argument('--modelpath', type=str, default="result/PCNN_ATTRA.model", help='path to model file')
-    parser.add_argument('--weight_decay', type=float, default=0.001, help='l2')
+    parser.add_argument('--weight_decay', type=float, default=0.0001, help='l2')
     parser.add_argument("--optimizer", type=str, default="sgd")
 
     args = parser.parse_args()
