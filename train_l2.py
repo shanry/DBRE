@@ -415,7 +415,7 @@ if __name__ == "__main__":
     parser.add_argument('--sent_encoding', type=str, default="pcnn", help='sentence encoding method, cnn or pcnn')
     parser.add_argument('--use_RA', action='store_true', help='use relation-aware intra-bag attention or not')
     parser.add_argument('--modelname', type=str, default="PCNN_ATTRA", help='model name')
-    parser.add_argument('--pretrain',cp  action='store_true', help='pre-training or not')
+    parser.add_argument('--pretrain', action='store_true', help='pre-training or not')
     parser.add_argument('--modelpath', type=str, default="result/PCNN_ATTRA.model", help='path to model file')
     parser.add_argument('--weight_decay', type=float, default=0.0001, help='l2')
     parser.add_argument("--optimizer", type=str, default="sgd")
