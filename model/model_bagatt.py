@@ -253,7 +253,7 @@ class Model(nn.Module):
                 crossatt = F.softmax(crossatt, 0)
                 weighted_bags_rep = torch.matmul(crossatt, bag_rep)
                 score = self.R_PCNN(self.dropout(weighted_bags_rep)).unsqueeze(0)
-                loss = nn.functional.cross_entropy(score, y[0])
+                loss = nn.functional.cross_entropy(score, y[0].unsqueeze(0))
                 losses.append(loss)
         losses = torch.stack(losses).mean()
         return losses
