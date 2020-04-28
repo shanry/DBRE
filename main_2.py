@@ -229,7 +229,11 @@ def pretrainModel(model, train_data, datasets, args):
 
     lr = args.init_lr
     optimizer = optim.SGD(model.parameters(), lr=lr, weight_decay=args.weight_decay)
-
+    if args.optimizer == "adadelta":
+        optimizer = optim.Adadelta(model.parameters(), lr=lr, weight_decay=args.weight_decay)
+        print("optimizer is adadelta")
+    else:
+        print("optimizer is sgd")
     now = time.strftime("%Y-%m-%d %H:%M:%S")
     print("Training:", str(now))
     num = 0
@@ -331,6 +335,11 @@ def trainModel(model, train_data_temp, datasets, args):
     batch = [args.group_size, args.batch_size_train]
     lr = args.init_lr / 100.
     optimizer = optim.SGD(model.parameters(), lr=lr, weight_decay=args.weight_decay)
+    if args.optimizer == "adadelta":
+        optimizer = optim.Adadelta(model.parameters(), lr=lr, weight_decay=args.weight_decay)
+        print("optimizer is adadelta")
+    else:
+        print("optimizer is sgd")
     train_data_filter = bags_sampling(train_data_temp, args.p, args.pn)
     print("len(train_data_filter):{}".format(len(train_data_filter)))
     train_data_gps = make_train_data(train_data_filter, word2id, max_filter_len, sentence_len, num_classes, group_size)
@@ -455,7 +464,8 @@ if __name__ == "__main__":
     parser.add_argument('--pretrain', action='store_true', help='pre-training or not')
     parser.add_argument('--modelpath', type=str, default="result/PCNN_ATTRA.model", help='path to model file')
     parser.add_argument('--savepath', type=str, default="result_plus", help='path to save model and result')
-    parser.add_argument('--weight_decay', type=float, default=0.01, help='l2')
+    parser.add_argument('--weight_decay', type=float, default=0.00, help='l2')
+    parser.add_argument("--optimizer", type=str, default="sgd")
 
 
     args = parser.parse_args()
