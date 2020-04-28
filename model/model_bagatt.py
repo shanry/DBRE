@@ -193,7 +193,7 @@ class Model(nn.Module):
         batch_p = []
         for i in range(len(total_shape) - 1):
             beg, end = total_shape[i], total_shape[i + 1]
-            weight_e = batch_e[beg: end, y_batch[i].cpu().data[0]]
+            weight_e = batch_e[beg: end, y_batch[i].cpu().item()]
             sent_emb = batch_sent_emb[beg: end]
             alpha = nn.functional.softmax(weight_e, 0)
             s = torch.matmul(alpha, sent_emb)
