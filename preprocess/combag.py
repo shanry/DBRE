@@ -142,7 +142,7 @@ def make_quasi_data(data, word2id, filter_h, max_l, num_classes, group_size):
             newsentlen.append(l)
         newIns = DocumentContainer(entity_pair=entities, sentences=newSent, label=rel, pos=pos, l_dist=l_dist,
                                        r_dist=r_dist, entity_pos=newent, sentlens=newsentlen)
-        newIns.shuffle()
+        # newIns.shuffle()
         allData[newIns.label[0]].append(newIns)
 
     label2sents = [[] for _ in range(num_classes)]
@@ -164,7 +164,7 @@ def make_quasi_data(data, word2id, filter_h, max_l, num_classes, group_size):
                 label2sents[j].append(onsentbag)
     quasi_insts = []
     for i in range(num_classes):
-        print("{}:{},{}".format(i, len(allData[i]), len(label2sents[i])))
+        # print("{}:{},{}".format(i, len(allData[i]), len(label2sents[i])))
         for j in range(len(label2sents[i])//group_size + 1):
             entity_pairs = []
             rel = [i]
@@ -175,7 +175,6 @@ def make_quasi_data(data, word2id, filter_h, max_l, num_classes, group_size):
             r_dist = []
             entitiesPos = []
             for k in range(group_size*j, min(group_size*j+group_size, len(label2sents[i]))):
-                # inst = OneSentBag(label2sents[i][k])
                 inst = label2sents[i][k]
                 entity_pairs.append(inst.entity_pair)
                 pos.append(inst.pos)
