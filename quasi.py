@@ -328,7 +328,7 @@ def quasiTrainModel(model, train_temp_data, datasets, args):
     sentence_len = 80
     max_filter_len = 3
     num_classes = 53
-    group_size = 4
+    group_size = 5
 
     lr = args.init_lr
     optimizer = optim.SGD(model.parameters(), lr=lr, weight_decay=args.weight_decay)
@@ -608,11 +608,12 @@ if __name__ == "__main__":
     model.cuda()
 
     if args.pretrain:
-        model = quasiTrainModel(model=model, train_temp_data=train_data_temp, datasets=datasets, args=args)
-        # model = pretrainModel(model=model, train_data=pretrain_data, datasets=datasets, args=args)
+        # model = quasiTrainModel(model=model, train_temp_data=train_data_temp, datasets=datasets, args=args)
+        model = pretrainModel(model=model, train_data=pretrain_data, datasets=datasets, args=args)
     else:
         config = torch.load(args.modelpath)
         model.load_state_dict(config['model'], strict=False)
 
-    model.name = model.name + '_BAGATT'
-    trainModel(model=model, train_data_temp=train_data_temp, datasets=datasets, args=args)
+    model.name = model.name + '_quasi'
+    # trainModel(model=model, train_data_temp=train_data_temp, datasets=datasets, args=args)
+    model = quasiTrainModel(model=model, train_temp_data=train_data_temp, datasets=datasets, args=args)
