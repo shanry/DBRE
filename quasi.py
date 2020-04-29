@@ -434,7 +434,7 @@ def trainModel(model, train_data_temp, datasets, args):
     sentence_len = 80
     max_filter_len = 3
     num_classes = 53
-    group_size = 5
+    group_size = args.group_size
 
     model.train()
     batch = [args.group_size, args.batch_size_train]
