@@ -328,7 +328,7 @@ def quasiTrainModel(model, train_temp_data, datasets, args):
     sentence_len = 80
     max_filter_len = 3
     num_classes = 53
-    group_size = 5
+    group_size = args.group_size
 
     lr = args.init_lr
     optimizer = optim.SGD(model.parameters(), lr=lr, weight_decay=args.weight_decay)
