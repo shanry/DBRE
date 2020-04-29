@@ -142,28 +142,32 @@ def make_quasi_data(data, word2id, filter_h, max_l, num_classes, group_size):
             newsentlen.append(l)
         newIns = DocumentContainer(entity_pair=entities, sentences=newSent, label=rel, pos=pos, l_dist=l_dist,
                                        r_dist=r_dist, entity_pos=newent, sentlens=newsentlen)
-        # newIns.shuffle()
+        newIns.shuffle()
         allData[newIns.label[0]].append(newIns)
 
     label2sents = [[] for _ in range(num_classes)]
     for j, data in enumerate(allData):
-        for i, idata in enumerate(data):
-            for num_sent in range(len(idata.sentences)):
-                entity_pair = idata.entity_pair
-                sentence = idata.sentences[num_sent]
-                label = idata.label
-                pos = idata.pos[num_sent]
-                l_dist = idata.l_dist[num_sent]
-                r_dist = idata.r_dist[num_sent]
-                entity_pos = idata.entity_pos[num_sent]
-                sentlen = idata.sentlens[num_sent]
-                onsentbag = OneSentBag(entity_pair, sentence,
-                                       label, pos,
-                                       l_dist, r_dist,
-                                       entity_pos, sentlen)
-                label2sents[j].append(onsentbag)
+        if j !=0 :
+            for i, idata in enumerate(data):
+                for num_sent in range(len(idata.sentences)):
+                    entity_pair = idata.entity_pair
+                    sentence = idata.sentences[num_sent]
+                    label = idata.label
+                    pos = idata.pos[num_sent]
+                    l_dist = idata.l_dist[num_sent]
+                    r_dist = idata.r_dist[num_sent]
+                    entity_pos = idata.entity_pos[num_sent]
+                    sentlen = idata.sentlens[num_sent]
+                    onsentbag = OneSentBag(entity_pair, sentence,
+                                           label, pos,
+                                           l_dist, r_dist,
+                                           entity_pos, sentlen)
+                    label2sents[j].append(onsentbag)
+        else:
+            for i, idata in enumerate(data):
+                label2sents[j].append(idata)
     quasi_insts = []
-    for i in range(num_classes):
+    for i in range(1, num_classes):
         # print("{}:{},{}".format(i, len(allData[i]), len(label2sents[i])))
         for j in range(len(label2sents[i])//group_size + 1):
             entity_pairs = []
@@ -175,6 +179,7 @@ def make_quasi_data(data, word2id, filter_h, max_l, num_classes, group_size):
             r_dist = []
             entitiesPos = []
             for k in range(group_size*j, min(group_size*j+group_size, len(label2sents[i]))):
+                # inst = OneSentBag(label2sents[i][k])
                 inst = label2sents[i][k]
                 entity_pairs.append(inst.entity_pair)
                 pos.append(inst.pos)
@@ -185,6 +190,10 @@ def make_quasi_data(data, word2id, filter_h, max_l, num_classes, group_size):
                 sentlens.append(inst.sentlen)
             quasi_Inst = DocumentContainer(entity_pair, sentences, rel, pos, l_dist, r_dist, entitiesPos, sentlens)
             quasi_insts.append(quasi_Inst)
+    print("len of quasi_insts:{}".format(len(quasi_insts)))
+    quasi_insts += label2sents[0]
+    print("len of quasi_insts:{}".format(len(quasi_insts)))
+    shuffle(quasi_insts)
     print("number of quasi-bags: {}".format(len(quasi_insts)))
     return quasi_insts
 
