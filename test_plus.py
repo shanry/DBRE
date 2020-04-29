@@ -521,8 +521,8 @@ if __name__ == "__main__":
     config = torch.load(args.model_dir + "/" + args.modelpath)
     model.load_state_dict(config['model'], strict=False)
     AUC_and_PN(model, datasets, args)
-    args.modelpath = "PCNN_ATTRA_BAGATT.model"
-
+    # args.modelpath = "PCNN_ATTRA_BAGATT.model"
+    args.modelpath = args.modelpath.split(".")[0]+"_BAGATT.model"
 
 
     config = torch.load(args.model_dir + "/" + args.modelpath)
