@@ -420,9 +420,9 @@ def quasiTrainModel(model, train_temp_data, datasets, args):
             nn.utils.clip_grad_norm(model.parameters(), 5.0)
             optimizer.step()
 
-            if num % 10000 == 0:
-                AUC_and_PN(model, datasets, args)
-                model.train()
+        # if num % 10000 == 0:
+        AUC_and_PN(model, datasets, args)
+        model.train()
 
     torch.save({'model': model.state_dict()}, args.savepath + '/' + model.name + '.model')
 
