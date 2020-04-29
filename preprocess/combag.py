@@ -252,12 +252,12 @@ if __name__ == "__main__":
     sentence_len = 80
     max_filter_len = 3
     num_classes = 53
-    group_size = 4
+    gs = 4
     now = time.strftime("%Y-%m-%d %H:%M:%S")
     print('point 0 time: ' + '\t\t' + str(now))
 
     train_data = \
-        make_quasi_data(trainData, word2id, max_filter_len, sentence_len, num_classes, group_size)
+        make_quasi_data(trainData, word2id, max_filter_len, sentence_len, num_classes, gs)
     f = open('train_bc.pkl', 'wb')
     pickle.dump(train_data, f, -1)
     f.close()
